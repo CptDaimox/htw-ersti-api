@@ -1,0 +1,25 @@
+service: ServiceName
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-central-1
+  stackName: ServiceName-${sls:stage}
+  httpApi:
+    name: '${sls:stage}-ServiceName-Gateway'
+  apiGateway:
+      binaryMediaTypes:
+          - '*/*'
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+functions:
+  api:
+    name: ServiceName-${sls:stage}
+    handler: src/app.handler
+    events:
+      - httpApi: '*'

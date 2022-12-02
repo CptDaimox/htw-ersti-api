@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Node16",
+    "module": "CommonJS",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "strict": true
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts"],
+  "exclude": ["dist", "node_modules"],
+  "files": ["src/types.d.ts"]
+}
