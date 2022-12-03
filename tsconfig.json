@@ -4,6 +4,7 @@
     "module": "CommonJS",
     "target": "es2022",
     "lib": ["es2022"],
+    "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
