@@ -7,7 +7,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
-    "dev": "ts-node src/app.ts",
+    "dev": "nodemon src/app.ts",
     "build": "rm -rf dist/ && prettier --write src/ && tsc",
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
@@ -31,6 +31,7 @@
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.20",
     "prettier": "2.7.1",
     "prisma": "^4.7.1",
     "ts-node": "^10.9.1",

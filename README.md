@@ -27,12 +27,7 @@ npm i
 ```
 - Create .env file in the root directory and fill in the credentials:
 ```
-DB_HOST=""
-DB_USERNAME=""
-DB_PASSWORD=""
-DB_NAME=""
-PRIVATE_KEY=""
-PUBLIC_KEY=""
+DATABASE_URL=mysql://root@localhost:3306/htw-ersti-app
 ```
 - Create some code in the ```app.ts``` file, create some controllers etc.
 - Start the Service (this sets the local port to 3000)
