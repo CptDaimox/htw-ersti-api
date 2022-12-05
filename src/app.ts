@@ -17,10 +17,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.post('/login', async (req: Request, res: Response) => {
-  if (req.body.email && req.body.password) {
-    const user = await getUserByEmail(req.body.email);
-    const isValid = await checkUser(user, req.body.password);
+app.get('/login/:username/:password', async (req: Request, res: Response) => {
+  if (req.params.username && req.params.password) {
+    const user = await getUserByEmail(req.params.username as string);
+    const isValid = await checkUser(user, req.params.password as string);
     return isValid ? res.status(200).json(user) : res.sendStatus(401);
   }
 });
