@@ -21,7 +21,7 @@ app.get('/login/:username/:password', async (req: Request, res: Response) => {
   if (req.params.username && req.params.password) {
     const user = await getUserByEmail(req.params.username as string);
     const isValid = await checkUser(user, req.params.password as string);
-    return isValid ? res.status(200).json(user) : res.sendStatus(401);
+    return isValid ? res.status(200).json(user) : res.sendStatus(404);
   }
 });
 
