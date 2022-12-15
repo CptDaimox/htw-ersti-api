@@ -1,7 +1,7 @@
 {
-  "name": "joyce-jwt-auth",
+  "name": "htw-ersti-api",
   "version": "1.0.0",
-  "description": "Joyce JWT Authenticator",
+  "description": "HTW Ersti API",
   "main": "src/app.ts",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
