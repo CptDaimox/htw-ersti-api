@@ -13,12 +13,46 @@ datasource db {
 model Role {
   id   Int    @id @default(autoincrement())
   name String @unique
+  User User[]
 }
 
 model User {
-  id       Int    @id
-  email    String @unique
-  password String
-  name     String
-  role     String @default("student")
+  id            Int             @id
+  email         String          @unique
+  password      String
+  name          String
+  role          Role            @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  roleName      String          @default("student")
+  Schnitzeljagd Schnitzeljagd[]
+  Game          Game[]
+}
+
+model Schnitzeljagd {
+  id        Int       @id @default(autoincrement())
+  password  String    @unique
+  groupSize Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  Station   Station[]
+}
+
+model Game {
+  id      Int       @id @default(autoincrement())
+  name    String
+  rules   String
+  user    User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId  Int?
+  Station Station[]
+}
+
+model Station {
+  id              Int           @id @default(autoincrement())
+  location        String
+  game            Game          @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  gameId          Int
+  qrCode          String
+  clue            String
+  endText         String
+  schnitzeljagd   Schnitzeljagd @relation(fields: [schnitzeljagdId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  schnitzeljagdId Int
 }
