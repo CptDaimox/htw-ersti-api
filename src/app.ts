@@ -1,30 +1,22 @@
-import express, { Express, Request, Response, NextFunction, urlencoded } from 'express';
-import { checkUser, getUserByEmail } from './controllers/user';
+import express, { Express, Request, Response, urlencoded } from 'express';
+import { userRouter } from './router/userRouter';
+import { schnitzelRouter } from './router/schnitzelRouter';
+import { gameRouter } from './router/gameRouter';
+import { stationRouter } from './router/stationRouter';
+import cors from 'cors';
 
 const app: Express = express();
 
+app.use(cors());
 app.use(urlencoded({ extended: true }));
 app.use(express.json());
 
-/** CORS */
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'GET PATCH DELETE POST');
-    return res.sendStatus(200);
-  }
-  next();
-});
+app.use('/user', userRouter);
+app.use('/schnitzel', schnitzelRouter);
+app.use('/game', gameRouter);
+app.use('/station', stationRouter);
 
-app.get('/login/:username/:password', async (req: Request, res: Response) => {
-  if (req.params.username && req.params.password) {
-    const user = await getUserByEmail(req.params.username as string);
-    const isValid = await checkUser(user, req.params.password as string);
-    return isValid ? res.status(200).json(user) : res.sendStatus(404);
-  }
-});
-
+app.get('/', (_req: Request, res: Response) => res.sendStatus(200));
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
