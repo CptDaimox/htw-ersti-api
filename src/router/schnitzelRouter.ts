@@ -13,3 +13,15 @@ schnitzelRouter.get('/:id?', async (req: Request, res: Response) => {
     return schnitzelJagd ? res.status(200).json(schnitzelJagd) : res.sendStatus(404);
   }
 });
+
+schnitzelRouter.post('/', async (req: Request, res: Response) => {
+  const schnitzelJagd = await schnitzelController.setSchnitzelJagd(
+    req.body.password,
+    req.body.groupSize,
+    req.body.userId,
+  ).catch((err) => {
+    console.log(err)
+    return res.status(500).json({prismaError: err.code})
+  });
+  return schnitzelJagd ? res.status(200).json(schnitzelJagd) : res.sendStatus(404);
+});

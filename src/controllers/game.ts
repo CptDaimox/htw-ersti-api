@@ -29,4 +29,16 @@ async function getGameByUserId(userId: number) {
   return user;
 }
 
-export { getAllGames, getGameByUserId };
+async function setGame(name: string, rules: string, userId: number) {
+  const game = await prisma.game.create({
+    data: {
+      name: name,
+      rules: rules,
+      userId: userId,
+    },
+  });
+  await prisma.$disconnect();
+  return game;
+}
+
+export { getAllGames, getGameByUserId, setGame };

@@ -18,4 +18,25 @@ async function getStationSchnitzelId(schnitzeljagdId: number) {
   return user;
 }
 
-export { getAllStations, getStationSchnitzelId };
+async function setStation(
+  location: string,
+  gameId: number,
+  qrCode: string,
+  clue: string,
+  endText: string,
+  schnitzeljagdId: number,
+) {
+  const game = await prisma.station.create({
+    data: {
+      location: location,
+      gameId: gameId,
+      qrCode: qrCode,
+      clue: clue,
+      endText: endText,
+      schnitzeljagdId: schnitzeljagdId,
+    },
+  });
+  await prisma.$disconnect();
+  return game;
+}
+export { getAllStations, getStationSchnitzelId, setStation };

@@ -13,3 +13,18 @@ stationRouter.get('/:id?', async (req: Request, res: Response) => {
     return station ? res.status(200).json(station) : res.sendStatus(404);
   }
 });
+
+stationRouter.post('/', async (req: Request, res: Response) => {
+  const station = await stationController.setStation(
+    req.body.location,
+    req.body.gameId,
+    req.body.qrCode,
+    req.body.clue,
+    req.body.endText,
+    req.body.schnitzeljagdId,
+  ).catch((err) => {
+    console.log(err)
+    return res.status(500).json({prismaError: err.code})
+  });;
+  return station ? res.status(200).json(station) : res.sendStatus(404);
+});

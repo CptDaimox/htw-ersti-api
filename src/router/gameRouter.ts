@@ -13,3 +13,15 @@ gameRouter.get('/:id?', async (req: Request, res: Response) => {
     return game ? res.status(200).json(game) : res.sendStatus(404);
   }
 });
+
+gameRouter.post('/', async (req: Request, res: Response) => {
+  const game = await gameController.setGame(
+    req.body.password,
+    req.body.groupSize,
+    req.body.userId,
+  ).catch((err) => {
+    console.log(err)
+    return res.status(500).json({prismaError: err.code})
+  });;
+  return game ? res.status(200).json(game) : res.sendStatus(404);
+});

@@ -18,4 +18,16 @@ async function getSchnitzelByUserId(userId: number) {
   return user;
 }
 
-export { getAllSchnitzel, getSchnitzelByUserId };
+async function setSchnitzelJagd(password: string, groupSize: number, userId: number) {
+  const schnitzelJagd = await prisma.schnitzeljagd.create({
+    data: {
+      password: password,
+      groupSize: groupSize,
+      userId: userId,
+    },
+  });
+  await prisma.$disconnect();
+  return schnitzelJagd;
+}
+
+export { getAllSchnitzel, getSchnitzelByUserId, setSchnitzelJagd };
