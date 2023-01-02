@@ -2,6 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch via NPM",
+      "request": "launch",
+      "runtimeArgs": [
+        "run", "dev"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Debug Serverless Offline",
@@ -9,12 +21,6 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "debug"],
       "sourceMaps": true,
-      "windows": {
-        "type": "node",
-        "request": "launch",
-        "name": "Debug Serverless Offline",
-        "runtimeArgs": ["run", "debug:win"],
-      }
     }
   ]
 }
