@@ -15,16 +15,44 @@ stationRouter.get('/:id?', async (req: Request, res: Response) => {
 });
 
 stationRouter.post('/', async (req: Request, res: Response) => {
-  const station = await stationController.setStation(
-    req.body.location,
-    req.body.gameId,
-    req.body.qrCode,
-    req.body.clue,
-    req.body.endText,
-    req.body.schnitzeljagdId,
-  ).catch((err) => {
-    console.log(err)
-    return res.status(500).json({prismaError: err.code})
-  });;
+  const station = await stationController
+    .setStation(
+      req.body.location,
+      req.body.gameId,
+      req.body.qrCode,
+      req.body.clue,
+      req.body.endText,
+      req.body.schnitzelJagdId,
+    )
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({ prismaError: err.code });
+    });
+  return station ? res.status(201).json(station) : res.sendStatus(404);
+});
+
+stationRouter.put('/:id', async (req: Request, res: Response) => {
+  const station = await stationController
+    .updateStation(
+      parseInt(req.params.id),
+      req.body.location,
+      req.body.gameId,
+      req.body.qrCode,
+      req.body.clue,
+      req.body.endText,
+      req.body.schnitzeljagdId,
+    )
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({ prismaError: err.code });
+    });
+  return station ? res.status(200).json(station) : res.sendStatus(404);
+});
+
+stationRouter.delete('/', async (req: Request, res: Response) => {
+  const station = await stationController.deleteStation(req.body.ids).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
   return station ? res.status(200).json(station) : res.sendStatus(404);
 });

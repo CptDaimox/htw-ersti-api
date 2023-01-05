@@ -15,13 +15,25 @@ gameRouter.get('/:id?', async (req: Request, res: Response) => {
 });
 
 gameRouter.post('/', async (req: Request, res: Response) => {
-  const game = await gameController.setGame(
-    req.body.password,
-    req.body.groupSize,
-    req.body.userId,
-  ).catch((err) => {
-    console.log(err)
-    return res.status(500).json({prismaError: err.code})
-  });;
+  const game = await gameController.setGame(req.body.name, req.body.rules, req.body.userId).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
   return game ? res.status(200).json(game) : res.sendStatus(404);
+});
+
+gameRouter.put('/:id', async (req: Request, res: Response) => {
+  const game = await gameController.updateGame(parseInt(req.params.id), req.body.name, req.body.rules).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
+  return game ? res.status(200).json(game) : res.sendStatus(404);
+});
+
+gameRouter.delete('/', async (req: Request, res: Response) => {
+  const station = await gameController.deleteGames(req.body.ids).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
+  return station ? res.status(200).json(station) : res.sendStatus(404);
 });

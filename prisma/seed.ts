@@ -77,6 +77,7 @@ async function createGames() {
     create: {
       name: '4 Gewinnt',
       rules: 'Schnitzeljagd',
+      userId: 564071,
     },
   });
   const game2 = await prisma.game.upsert({
@@ -85,6 +86,7 @@ async function createGames() {
     create: {
       name: 'Twister',
       rules: 'Schnitzeljagd',
+      userId: 563182,
     },
   });
 

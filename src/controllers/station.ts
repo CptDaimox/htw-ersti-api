@@ -11,7 +11,7 @@ async function getAllStations() {
 async function getStationSchnitzelId(schnitzeljagdId: number) {
   const user = await prisma.station.findMany({
     where: {
-      schnitzeljagdId: schnitzeljagdId,
+      schnitzeljagdId: { equals: schnitzeljagdId },
     },
   });
   await prisma.$disconnect();
@@ -39,4 +39,42 @@ async function setStation(
   await prisma.$disconnect();
   return game;
 }
-export { getAllStations, getStationSchnitzelId, setStation };
+
+async function updateStation(
+  id: number,
+  location: string,
+  gameId: number,
+  qrCode: string,
+  clue: string,
+  endText: string,
+  schnitzeljagdId: number,
+) {
+  const updateStation = await prisma.station
+    .update({
+      where: {
+        id: id,
+      },
+      data: {
+        location: location,
+        gameId: gameId,
+        qrCode: qrCode,
+        clue: clue,
+        endText: endText,
+        schnitzeljagdId: schnitzeljagdId,
+      },
+    })
+    .catch((e) => {
+      return e;
+    });
+  await prisma.$disconnect();
+  return updateStation;
+}
+
+async function deleteStation(ids: number[]) {
+  const deleteStation = await prisma.station.deleteMany({ where: { id: { in: ids } } }).catch((e) => {
+    return e;
+  });
+  await prisma.$disconnect();
+  return deleteStation;
+}
+export { getAllStations, getStationSchnitzelId, setStation, updateStation, deleteStation };

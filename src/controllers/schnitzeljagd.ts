@@ -15,7 +15,7 @@ async function getSchnitzelByUserId(userId: number) {
     },
   });
   await prisma.$disconnect();
-  return user;
+  return user[0];
 }
 
 async function setSchnitzelJagd(password: string, groupSize: number, userId: number) {
@@ -30,4 +30,31 @@ async function setSchnitzelJagd(password: string, groupSize: number, userId: num
   return schnitzelJagd;
 }
 
-export { getAllSchnitzel, getSchnitzelByUserId, setSchnitzelJagd };
+async function updateSchnitzelJagd(id: number, password: string, groupSize: number) {
+  const schnitzelJagd = await prisma.schnitzeljagd
+    .update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: password,
+        groupSize: groupSize,
+      },
+    })
+    .catch((e) => {
+      return e;
+    });
+  await prisma.$disconnect();
+  return schnitzelJagd;
+}
+
+async function getByPassword(password: string) {
+  const schnitzelJagd = await prisma.schnitzeljagd.findUnique({
+    where: {
+      password: password,
+    },
+  });
+  await prisma.$disconnect();
+  return schnitzelJagd;
+}
+export { getAllSchnitzel, getSchnitzelByUserId, setSchnitzelJagd, updateSchnitzelJagd, getByPassword };
