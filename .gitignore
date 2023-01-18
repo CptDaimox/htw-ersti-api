@@ -80,3 +80,4 @@ dist/**/*
 .build/**/*
 
 .DS_Store
+.vercel
