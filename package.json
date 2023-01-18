@@ -2,13 +2,12 @@
   "name": "htw-ersti-api",
   "version": "1.0.0",
   "description": "HTW Ersti API",
-  "main": "api/index.ts",
+  "main": "api/handler.ts",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
-    "start": "vercel dev",
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon api/handler.ts",
     "build": "prettier --write src/ && tsc",
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
