@@ -15,22 +15,18 @@ schnitzelRouter.get('/:id?', async (req: Request, res: Response) => {
 });
 
 schnitzelRouter.post('/', async (req: Request, res: Response) => {
-  const schnitzelJagd = await schnitzelController
-    .setSchnitzelJagd(req.body.password, req.body.groupSize, req.body.userId)
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({ prismaError: err.code });
-    });
+  const schnitzelJagd = await schnitzelController.setSchnitzelJagd(req.body).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
   return schnitzelJagd ? res.status(200).json(schnitzelJagd) : res.sendStatus(404);
 });
 
 schnitzelRouter.put('/:id', async (req: Request, res: Response) => {
-  const schnitzelJagd = await schnitzelController
-    .updateSchnitzelJagd(parseInt(req.params.id), req.body.password, req.body.groupSize)
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({ prismaError: err.code });
-    });
+  const schnitzelJagd = await schnitzelController.updateSchnitzelJagd(req.body, req.params.id).catch((err) => {
+    console.log(err);
+    return res.status(500).json({ prismaError: err.code });
+  });
 
   if (schnitzelJagd && schnitzelJagd.stack && schnitzelJagd.message) {
     return res.status(500).json({ prismaError: schnitzelJagd.code });
@@ -40,5 +36,10 @@ schnitzelRouter.put('/:id', async (req: Request, res: Response) => {
 
 schnitzelRouter.get('/password/:password', async (req: Request, res: Response) => {
   const schnitzelJagd = await schnitzelController.getByPassword(req.params.password);
+  return schnitzelJagd ? res.status(200).json(schnitzelJagd) : res.sendStatus(404);
+});
+
+schnitzelRouter.post('/template/:matNr', async (req: Request, res: Response) => {
+  const schnitzelJagd = await schnitzelController.setSchnitzelJagdTemplate(parseInt(req.params.matNr));
   return schnitzelJagd ? res.status(200).json(schnitzelJagd) : res.sendStatus(404);
 });

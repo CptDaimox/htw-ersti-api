@@ -8,10 +8,10 @@ async function getAllStations() {
   return allUsers;
 }
 
-async function getStationSchnitzelId(schnitzeljagdId: number) {
+async function getStationSchnitzelId(schnitzelJagdId: string) {
   const user = await prisma.station.findMany({
     where: {
-      schnitzeljagdId: { equals: schnitzeljagdId },
+      schnitzelJagdId: { equals: schnitzelJagdId },
     },
   });
   await prisma.$disconnect();
@@ -20,20 +20,18 @@ async function getStationSchnitzelId(schnitzeljagdId: number) {
 
 async function setStation(
   location: string,
-  gameId: number,
   qrCode: string,
   clue: string,
   endText: string,
-  schnitzeljagdId: number,
+  schnitzelJagdId: string,
 ) {
   const game = await prisma.station.create({
     data: {
       location: location,
-      gameId: gameId,
       qrCode: qrCode,
       clue: clue,
       endText: endText,
-      schnitzeljagdId: schnitzeljagdId,
+      schnitzelJagdId: schnitzelJagdId,
     },
   });
   await prisma.$disconnect();
@@ -41,13 +39,12 @@ async function setStation(
 }
 
 async function updateStation(
-  id: number,
+  id: string,
   location: string,
-  gameId: number,
   qrCode: string,
   clue: string,
   endText: string,
-  schnitzeljagdId: number,
+  schnitzelJagdId: string,
 ) {
   const updateStation = await prisma.station
     .update({
@@ -56,11 +53,10 @@ async function updateStation(
       },
       data: {
         location: location,
-        gameId: gameId,
         qrCode: qrCode,
         clue: clue,
         endText: endText,
-        schnitzeljagdId: schnitzeljagdId,
+        schnitzelJagdId: schnitzelJagdId,
       },
     })
     .catch((e) => {
@@ -70,7 +66,7 @@ async function updateStation(
   return updateStation;
 }
 
-async function deleteStation(ids: number[]) {
+async function deleteStation(ids: string[]) {
   const deleteStation = await prisma.station.deleteMany({ where: { id: { in: ids } } }).catch((e) => {
     return e;
   });

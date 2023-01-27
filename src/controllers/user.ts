@@ -7,6 +7,9 @@ async function getUserByEmail(email: string) {
     where: {
       email: email,
     },
+    include: {
+      schnitzelJagd: { include: { station: { include: { game: true } } } },
+    },
   });
   await prisma.$disconnect();
   return user;

@@ -26,42 +26,43 @@ model Role {
 }
 
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  matNr         Int             @unique
-  email         String          @unique
-  password      String
-  name          String
-  role          Role            @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
-  roleName      String          @default("student")
-  Schnitzeljagd Schnitzeljagd[]
-  Game          Game[]
+  id                  String         @id @default(auto()) @map("_id") @db.ObjectId
+  matNr               Int            @unique
+  email               String         @unique
+  password            String
+  name                String
+  role                Role           @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  roleName            String         @default("student")
+  schnitzelJagd       Schnitzeljagd?
+  joinedSchnitzelJagd Schnitzeljagd? @relation("joined", fields: [joined], references: [password], onDelete: NoAction, onUpdate: NoAction)
+  joined              String?
 }
 
 model Schnitzeljagd {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  password  String    @unique
-  groupSize Int
-  user      User      @relation(fields: [userId], references: [matNr])
-  userId    Int
-  Station   Station[]
-}
-
-model Game {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  rules   String
-  user    User      @relation(fields: [userId], references: [id])
-  userId  String    @db.ObjectId
-  Station Station[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  password    String    @unique
+  groupSize   Int
+  owner       User      @relation(fields: [ownerId], references: [matNr])
+  ownerId     Int       @unique
+  station     Station[]
+  joinedUsers User[]    @relation("joined")
 }
 
 model Station {
   id              String        @id @default(auto()) @map("_id") @db.ObjectId
   location        String
-  game            Game          @relation(fields: [gameId], references: [id])
-  gameId          String        @db.ObjectId
+  game            Game?
   qrCode          String
   clue            String
   endText         String
-  schnitzeljagd   Schnitzeljagd @relation(fields: [schnitzeljagdId], references: [id])
-  schnitzeljagdId String        @db.ObjectId
+  schnitzelJagd   Schnitzeljagd @relation(fields: [schnitzelJagdId], references: [id])
+  schnitzelJagdId String        @db.ObjectId
+}
+
+model Game {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  rules     String
+  Station   Station? @relation(fields: [stationId], references: [id])
+  stationId String?  @unique @db.ObjectId
 }

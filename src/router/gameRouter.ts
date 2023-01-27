@@ -5,8 +5,8 @@ export const gameRouter = express.Router();
 
 gameRouter.get('/:id?', async (req: Request, res: Response) => {
   if (req.params.id && !isNaN(parseInt(req.params.id))) {
-    const userId = parseInt(req.params.id);
-    const game = await gameController.getGameByUserId(userId);
+    const userId = req.params.id;
+    const game = await gameController.getGameById(userId);
     return game ? res.status(200).json(game) : res.sendStatus(404);
   } else {
     const game = await gameController.getAllGames();
@@ -15,7 +15,7 @@ gameRouter.get('/:id?', async (req: Request, res: Response) => {
 });
 
 gameRouter.post('/', async (req: Request, res: Response) => {
-  const game = await gameController.setGame(req.body.name, req.body.rules, req.body.userId).catch((err) => {
+  const game = await gameController.setGame(req.body.name, req.body.rules).catch((err) => {
     console.log(err);
     return res.status(500).json({ prismaError: err.code });
   });
@@ -23,7 +23,7 @@ gameRouter.post('/', async (req: Request, res: Response) => {
 });
 
 gameRouter.put('/:id', async (req: Request, res: Response) => {
-  const game = await gameController.updateGame(parseInt(req.params.id), req.body.name, req.body.rules).catch((err) => {
+  const game = await gameController.updateGame(req.params.id, req.body.name, req.body.rules).catch((err) => {
     console.log(err);
     return res.status(500).json({ prismaError: err.code });
   });

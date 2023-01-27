@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 async function main() {
-  // await createRoles();
+  await createRoles();
   await createUsers();
   await createSchnitzelJagd();
   // await createGames();
@@ -17,34 +17,27 @@ main()
     process.exit(1);
   });
 
-async function createUsers() {
-  const toan = await prisma.user.upsert({
-    where: { email: 'toan@htw-berlin.de' },
+async function createRoles() {
+  const student = await prisma.role.upsert({
+    where: { name: 'student' },
     update: {},
     create: {
-      matNr: 564071,
-      email: 'toan@htw-berlin.de',
-      name: 'Toan Tran Quoc',
-      roleName: 'student',
-      password: '1234',
-
+      name: 'student',
     },
   });
 
-  await prisma.user.create({
-    data: {
-      matNr: 564072,
-      email: 'florian@htw-berlin.de',
-      name: 'Florian Stüber',
-      roleName: 'buddy',
-      Schnitzeljagd: {
-        create:{
-          password: 'Sommersemester2023',
-          groupSize: 5
-        }
-      }
-    }
-  })
+  const buddy = await prisma.role.upsert({
+    where: { name: 'buddy' },
+    update: {},
+    create: {
+      name: 'buddy',
+    },
+  });
+
+  console.log(buddy, student);
+}
+
+async function createUsers() {
   const florian = await prisma.user.upsert({
     where: { email: 'florian@htw-berlin.de' },
     update: {},
@@ -52,7 +45,19 @@ async function createUsers() {
       matNr: 563182,
       email: 'florian@htw-berlin.de',
       name: 'Florian Stüber',
-      roleName: 'student',
+      roleName: 'buddy',
+      password: '1234',
+    },
+  });
+
+  const toan = await prisma.user.upsert({
+    where: { email: 'toan@htw-berlin.de' },
+    update: {},
+    create: {
+      matNr: 564071,
+      email: 'toan@htw-berlin.de',
+      name: 'Toan',
+      roleName: 'buddy',
       password: '1234',
     },
   });
@@ -67,17 +72,73 @@ async function createSchnitzelJagd() {
     create: {
       password: 'Sommersemester2023',
       groupSize: 5,
-      userId: 564071,
+      ownerId: 564071,
+      station: {
+        create: [
+          {
+            location: 'Mensa',
+            qrCode: '1234',
+            clue: 'Hier ist die Mensa',
+            endText: 'Ende',
+            game: {
+              create: {
+                name: '4 Gewinnt',
+                rules: 'Schnitzeljagd',
+              },
+            },
+          },
+          {
+            location: 'TresLounge',
+            qrCode: '1234',
+            clue: 'TresLounge',
+            endText: 'Ende',
+            game: {
+              create: {
+                name: 'Twister',
+                rules: 'Schnitzeljagd',
+              },
+            },
+          },
+        ],
+      },
     },
   });
 
   const schnitzelFlo = await prisma.schnitzeljagd.upsert({
-    where: { password: 'Sommersemester2022' },
+    where: { password: 'Sommersemester2023' },
     update: {},
     create: {
       password: 'Sommersemester2022',
       groupSize: 5,
-      userId: 563182,
+      ownerId: 563182,
+      station: {
+        create: [
+          {
+            location: 'Mensa',
+            qrCode: '1234',
+            clue: 'Hier ist die Mensa',
+            endText: 'Ende',
+            game: {
+              create: {
+                name: '4 Gewinnt',
+                rules: 'Schnitzeljagd',
+              },
+            },
+          },
+          {
+            location: 'TresLounge',
+            qrCode: '1234',
+            clue: 'TresLounge',
+            endText: 'Ende',
+            game: {
+              create: {
+                name: 'Twister',
+                rules: 'Schnitzeljagd',
+              },
+            },
+          },
+        ],
+      },
     },
   });
 
@@ -85,7 +146,7 @@ async function createSchnitzelJagd() {
 }
 
 // async function createGames() {
-  
+
 //   const game1 = await prisma.game.upsert({
 //     where: { id: 1 },
 //     update: {},
@@ -165,24 +226,4 @@ async function createSchnitzelJagd() {
 //   });
 
 //   console.log(station1, station2);
-// }
-
-// async function createRoles(){
-//   const role1 = await prisma.role.upsert({
-//     where: { id: 1 },
-//     update: {},
-//     create: {
-//       name: 'student',
-//     },
-//   });
-
-//   const role2 = await prisma.role.upsert({
-//     where: { id: 2 },
-//     update: {},
-//     create: {
-//       name: 'buddy',
-//     },
-//   });
-
-//   console.log(role1, role2);
 // }

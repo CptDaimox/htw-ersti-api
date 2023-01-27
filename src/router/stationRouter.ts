@@ -4,8 +4,8 @@ import * as stationController from '../controllers/station';
 export const stationRouter = express.Router();
 
 stationRouter.get('/:id?', async (req: Request, res: Response) => {
-  if (req.params.id && !isNaN(parseInt(req.params.id))) {
-    const schnitzelId = parseInt(req.params.id);
+  if (req.params.id) {
+    const schnitzelId = req.params.id;
     const station = await stationController.getStationSchnitzelId(schnitzelId);
     return station ? res.status(200).json(station) : res.sendStatus(404);
   } else {
@@ -18,7 +18,6 @@ stationRouter.post('/', async (req: Request, res: Response) => {
   const station = await stationController
     .setStation(
       req.body.location,
-      req.body.gameId,
       req.body.qrCode,
       req.body.clue,
       req.body.endText,
@@ -34,9 +33,8 @@ stationRouter.post('/', async (req: Request, res: Response) => {
 stationRouter.put('/:id', async (req: Request, res: Response) => {
   const station = await stationController
     .updateStation(
-      parseInt(req.params.id),
+      req.params.id,
       req.body.location,
-      req.body.gameId,
       req.body.qrCode,
       req.body.clue,
       req.body.endText,

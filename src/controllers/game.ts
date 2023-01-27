@@ -8,29 +8,28 @@ async function getAllGames() {
   return allUsers;
 }
 
-async function getGameByUserId(userId: number) {
+async function getGameById(id: string) {
   const user = await prisma.game.findMany({
     where: {
-      userId: { equals: userId },
+      id: { equals: id },
     },
   });
   await prisma.$disconnect();
   return user;
 }
 
-async function setGame(name: string, rules: string, userId: number) {
+async function setGame(name: string, rules: string) {
   const game = await prisma.game.create({
     data: {
       name: name,
       rules: rules,
-      userId: userId,
     },
   });
   await prisma.$disconnect();
   return game;
 }
 
-async function updateGame(id: number, name: string, rules: string) {
+async function updateGame(id: string, name: string, rules: string) {
   const game = await prisma.game.update({
     where: {
       id: id,
@@ -44,7 +43,7 @@ async function updateGame(id: number, name: string, rules: string) {
   return game;
 }
 
-async function deleteGames(ids: number[]) {
+async function deleteGames(ids: string[]) {
   const game = await prisma.game.deleteMany({ where: { id: { in: ids } } }).catch((e) => {
     return e;
   });
@@ -52,4 +51,4 @@ async function deleteGames(ids: number[]) {
   return game;
 }
 
-export { getAllGames, getGameByUserId, setGame, updateGame, deleteGames };
+export { getAllGames, getGameById, setGame, updateGame, deleteGames };
