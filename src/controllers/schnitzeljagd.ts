@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -18,6 +18,29 @@ async function getSchnitzelByUserId(userId: number) {
   return user[0];
 }
 
+async function getSchnitzelById(id: number) {
+  const schnitzel = await prisma.schnitzeljagd.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  await prisma.$disconnect();
+  return schnitzel;
+}
+
+async function getJoinedUsers(password: string) {
+  const user = await prisma.schnitzeljagd.findMany({
+    select: {
+      joinedUsers: { select: { id: true, name: true, email: true } },
+    },
+    where: {
+      password: password,
+    },
+  });
+  await prisma.$disconnect();
+  return user[0];
+}
+
 async function setSchnitzelJagd(password: string, groupSize: number, userId: number) {
   const schnitzelJagd = await prisma.schnitzeljagd.create({
     data: {
@@ -30,16 +53,16 @@ async function setSchnitzelJagd(password: string, groupSize: number, userId: num
   return schnitzelJagd;
 }
 
-async function updateSchnitzelJagd(id: number, password: string, groupSize: number) {
+async function updateSchnitzelJagd(id: number, data: Prisma.SchnitzeljagdCreateManyInput) {
   const schnitzelJagd = await prisma.schnitzeljagd
     .update({
       where: {
         id: id,
       },
-      data: {
-        password: password,
-        groupSize: groupSize,
-      },
+      data: data,
+      include:{
+        joinedUsers: true
+      }
     })
     .catch((e) => {
       return e;
@@ -57,4 +80,12 @@ async function getByPassword(password: string) {
   await prisma.$disconnect();
   return schnitzelJagd;
 }
-export { getAllSchnitzel, getSchnitzelByUserId, setSchnitzelJagd, updateSchnitzelJagd, getByPassword };
+export {
+  getAllSchnitzel,
+  getSchnitzelByUserId,
+  setSchnitzelJagd,
+  updateSchnitzelJagd,
+  getByPassword,
+  getJoinedUsers,
+  getSchnitzelById,
+};

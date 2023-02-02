@@ -25,7 +25,7 @@ async function createUsers() {
       id: 564071,
       email: 'toan@htw-berlin.de',
       name: 'Toan Tran Quoc',
-      roleName: 'student',
+      roleName: 'buddy',
       password: '1234',
     },
   });
@@ -42,7 +42,78 @@ async function createUsers() {
     },
   });
 
-  console.log(toan, florian);
+  const friedrich = await prisma.user.upsert({
+    where: { email: 'friedrich@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 580113,
+      email: 'friedrich@htw-berlin.de',
+      name: 'Friedrich Luckmann',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+
+  const jacob = await prisma.user.upsert({
+    where: { email: 'jacob@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 563974,
+      email: 'jacob@htw-berlin.de',
+      name: 'Jacob-Benedikt Haut',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+
+  const enis = await prisma.user.upsert({
+    where: { email: 'enis@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 579664,
+      email: 'enis@htw-berlin.de',
+      name: 'Enis Aztekin',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+
+  const levent = await prisma.user.upsert({
+    where: { email: 'levent@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 571734,
+      email: 'levent@htw-berlin.de',
+      name: 'Kevin Levent Julian Arica',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+
+  const mama = await prisma.user.upsert({
+    where: { email: 'mama@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 654321,
+      email: 'mama@htw-berlin.de',
+      name: 'Mama Luckmann',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+
+  const papa = await prisma.user.upsert({
+    where: { email: 'papa@htw-berlin.de' },
+    update: {},
+    create: {
+      id: 123456,
+      email: 'papa@htw-berlin.de',
+      name: 'Papa Luckmann',
+      roleName: 'student',
+      password: '1234',
+    },
+  });
+  console.log(toan, florian, friedrich, jacob, enis, mama, papa, levent);
 }
 
 async function createSchnitzelJagd() {
@@ -56,21 +127,10 @@ async function createSchnitzelJagd() {
     },
   });
 
-  const schnitzelFlo = await prisma.schnitzeljagd.upsert({
-    where: { password: 'Sommersemester2022' },
-    update: {},
-    create: {
-      password: 'Sommersemester2022',
-      groupSize: 5,
-      userId: 563182,
-    },
-  });
-
-  console.log(schnitzelToan, schnitzelFlo);
+  console.log(schnitzelToan);
 }
 
 async function createGames() {
-  
   const game1 = await prisma.game.upsert({
     where: { id: 1 },
     update: {},
@@ -86,7 +146,7 @@ async function createGames() {
     create: {
       name: 'Twister',
       rules: 'Schnitzeljagd',
-      userId: 563182,
+      userId: 564071,
     },
   });
 
@@ -106,7 +166,7 @@ async function createGames() {
     create: {
       name: 'Sackhüpfen',
       rules: 'Schnitzeljagd',
-      userId: 563182,
+      userId: 564071,
     },
   });
   const game5 = await prisma.game.upsert({
@@ -145,14 +205,14 @@ async function createStations() {
       qrCode: '1234',
       clue: 'Hier ist die TresLounge',
       endText: 'Ende',
-      schnitzeljagdId: 2,
+      schnitzeljagdId: 1,
     },
   });
 
   console.log(station1, station2);
 }
 
-async function createRoles(){
+async function createRoles() {
   const role1 = await prisma.role.upsert({
     where: { id: 1 },
     update: {},

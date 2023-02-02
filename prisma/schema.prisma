@@ -1,21 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// generator client {
-//   provider = "prisma-client-js"
-// }
-
-// datasource db {
-//   provider = "mysql"
-//   url      = env("DATABASE_URL")
-// }
-
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -26,25 +15,49 @@ model Role {
 }
 
 model User {
-  id            Int             @id
-  email         String          @unique
-  password      String
-  name          String
-  role          Role            @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
-  roleName      String          @default("student")
-  Schnitzeljagd Schnitzeljagd[]
-  Game          Game[]
+  id                   Int              @id
+  email                String           @unique
+  password             String
+  name                 String
+  role                 Role             @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  roleName             String           @default("student")
+  Schnitzeljagd        Schnitzeljagd?   @relation("owner")
+  Game                 Game[]
+  joinedSchnitzel      Schnitzeljagd?   @relation("joined", fields: [joinedSchnitzelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  joinedSchnitzelId    Int?
+  schnitzelGroup       schnitzelGroup?  @relation("group", fields: [schnitzelGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  schnitzelGroupId     Int?
+  schnitzelGroupLeader schnitzelGroup[] @relation("leader")
 
+  @@index([joinedSchnitzelId])
+  @@index([schnitzelGroupId])
   @@index([roleName])
 }
 
+model schnitzelGroup {
+  id              Int           @id @default(autoincrement())
+  schnitzeljagd   Schnitzeljagd @relation(fields: [schnitzeljagdPw], references: [password], onDelete: NoAction, onUpdate: NoAction)
+  schnitzeljagdPw String
+  groupMembers    User[]        @relation("group")
+  groupLeader     User          @relation("leader", fields: [groupLeaderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  groupLeaderId   Int
+  groupName       String
+
+  @@index([schnitzeljagdPw])
+  @@index([groupLeaderId])
+}
+
 model Schnitzeljagd {
-  id        Int       @id @default(autoincrement())
-  password  String    @unique
-  groupSize Int
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    Int
-  Station   Station[]
+  id          Int              @id @default(autoincrement())
+  password    String           @unique
+  groupSize   Int
+  user        User             @relation("owner", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      Int              @unique
+  Station     Station[]
+  joinedUsers User[]           @relation("joined")
+  unlocked    Boolean          @default(false)
+  started     Boolean          @default(false)
+  groups      schnitzelGroup[]
 
   @@index([userId])
 }
