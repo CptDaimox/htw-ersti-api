@@ -49,7 +49,6 @@ Finally, send requests to `http://localhost:<port>`
 # Debugging
 In the .vscode folder is a launch.json. Select Debug Serverless offline and set breakpoints.
 The Debugger will run ```npm run debug```.
-If your OS is Windows Vscode will detect it and will run ```npm run debug:win```
 
 # Deployment
 You may have noticed the ```vercel.json``` file. This configures the deployment for [Vercel](https://vercel.com/docs/cli).
